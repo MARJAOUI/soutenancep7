@@ -1,7 +1,7 @@
 // importations
 
 const bcrypt = require('bcrypt');
-const auth = require('../middleware/jwt.auth');
+const auth = require('../middleware/jwt-auth');
 var models = require('../models');
 const user = require('../models/user');
 
@@ -42,7 +42,7 @@ module.exports = {
                         prenom: prenom,
                         email: email,
                         password: bcryptedPassword,
-                        isAdmin: false,
+                        isAdmin: 0,
                     })
                     .then(function(newUser) {
                         return res.status(201).json({
@@ -124,7 +124,7 @@ module.exports = {
         const isAdmin = req.body.isAdmin;
 
         models.User.findOne({
-            attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],
+            attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],  ////  , 'isAdmin'
             where: { id: userId}
         }).then(function(userFound) {
             if (userFound) {

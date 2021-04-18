@@ -24,7 +24,7 @@ server.use(bodyParser.json());
 
 
 server.get ('/', function (req, res) {
-    res.setHeader('content-Type', 'text/html');
+    res.setHeader('Content-Type', 'text/html');
     res.status(200).send('<h1>Bonjour sur mon premier Server local</h1>'); /// texte à afficher sur page
 });
 
