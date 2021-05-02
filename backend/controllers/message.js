@@ -10,16 +10,18 @@ const FormData = require('form-data');
 const asynclib = require('async')
 module.exports = {
     
-    createMessage: function (req, res) {
+    createMessage: function (req, res, next) {
 
         //  récupération autorisation
         var headerAuth = req.headers ['authorization'];
         var userId = auth.getUserId(headerAuth); ////    var userId = auth.getUserId();     
 
         //  paramètres
-        const titre = req.body.titre;
-        const contenu = req.body.contenu;
-        const imageUrl = `${req.protocol}://${req.get('host')}`;    
+        const message = [    
+        titre = req.body.titre,
+        contenu = req.body.contenu,
+        imageUrl = `${req.protocol}://${req.get('host')}`  
+    ]   
         
         if (titre == null || contenu == null|| imageUrl == null) {     
             return res.status(400).json({'error': '  un parametre manquant'});
@@ -58,45 +60,13 @@ module.exports = {
                     return res.status(500).json({'error': 'cannot post message'})
                 }
             });
-            
-            
-       /* var userFound = models.User.findOne({
-            where: { id: userId }
-        })  
-        .then(function(userFound){
-            console.log(userFound);   
-            if (userFound) {         
-                const newMessage = models.Message.create( {
-                    titre: titre,
-                    contenu: contenu,
-                    imageUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}`,  
-                    UserId: userFound.id  // lien entre le user et le message créé
-                })
-                .then(function(newMessage) {
-                    if (newMessage) {
-                        return res.status(201).json(newMessage);
-                    }else {
-                        return res.status(500).json({'error': 'le message ne peut etre créé !'});
-                    }
-                })
-            }else {
-                return res.status(500).json({'error': 'user non trouvé'}); 
-            }
-        })
-        .catch(function(err) {
-            return res.status(500).json({'error': 'vérification user impossibe'});
-            })*/
 },
     listeMessages: function (req, res) {
         var fields = req.query.fields;  // selectionner les colonnes souhaitées
-       // var limit = parseInt(req.query.limit); // recupérer les messages par nb de lignes limité
-       // var offset = parseInt(req.query.offset);
         var order = req.query.order;  //  ordre d'affichage des messages
         models.Message.findAll({
-            attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-          //  limit: (!isNaN(limit)) ? limit : null,
-           // offset: (!isNAN(offset)) ? offset : null,
-            order: [(order != null) ? order.split(':') : ['titre', 'ASC']],
+           attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
+           order: [(order != null) ? order.split(':') : ['titre', 'ASC']],
             include: [{    
                 model: models.User,
                 attributes: ['nom', 'prenom']  // infos affichés avec le message
@@ -111,32 +81,57 @@ module.exports = {
             res.status(500).json({'error' : 'champs invalides'})
         })
     },
+    /////////////////////////////////////////////////////
 
-    modifyMessage: function(req, res) {
+    DetailsMessage: function(req, res) {
         //  récupération autorisation header
         var headerAuth = req.headers ['authorization'];
         var userId = auth.getUserId(headerAuth);
+        // determination du message à supprimer
 
-        // declaration des parametres
-        
-        const titre = req.body.titre;
-        const contenu = req.body.contenu;
-        const imageUrl = req.imageUrl;
-
+        var messageId = req.params.id ;
+             console.log(messageId);
         models.Message.findOne({
-            attributes: ['id','titre', 'contenu', 'imageUrl'],
-            where: { id: userId}
-
-       /* models.Message.findOne({
-            attributes: ['id', 'titre', 'contenu', 'imageUrl'],
-            where: { id: id}*/
+            where: { id: messageId} , 
+            include: [{    
+                model: models.User,
+                attributes: ['id'],
+            }]
+        }).then(function(message) {
+            if (message) {
+                res.status(200).json(message);
+            }else {
+                res.status(404).json({'error': 'aucun message trouvé !'});
+            }
+        }).catch(function(error) {
+            res.status(500).json({'error': 'message introuvable'})
+        });
+    },
+    /////////////////////////////////////////
+    modifyMessage: function(req, res) {
+        var headerAuth = req.headers ['authorization'];
+        var userId = auth.getUserId(headerAuth);
+     // determination du message à modifier
+           const messageId = req.params.id ;
+           const titre = req.body.titre;
+           const contenu = req.body.contenu;
+           const imageUrl = req.body.imageUrl;
+            console.log(messageId);
+      models.Message.findOne ({
+        attributes: [ 'id', 'titre', 'contenu', 'imageUrl'],
+       where: {id: messageId}, 
+        include: [{    
+            model: models.User,
+            attributes: ['id'],
+            where: { id: userId},
+        }], 
         }).then(function(messageFound) {
             const modifiedMessage = messageFound.update({
                 titre: ( titre ?  titre : message.titre),
                 contenu: (contenu ? contenu : message.contenu),
                 imageUrl: (imageUrl ? imageUrl : message.imageUrl),
             }).then(function(modifiedMessage){
-                return res.status(200).json(({'message': 'Le message a été modifié !'}))
+                return res.status(200).json(modifiedMessage)
             }).catch(function(err) {
                 res.status(500).json({'error': 'Le message ne peut etre modifié'})
             });
@@ -144,23 +139,23 @@ module.exports = {
             res.status(500).json({'error': 'message introuvable'})
         });
     },
+    ///////////////////////////////////////////////////
     deleteMessage: function(req, res) {
         //  récupération autorisation header
         var headerAuth = req.headers ['authorization'];
           var userId = auth.getUserId(headerAuth);
-
-        // declaration des parametres
-        const titre = this.titre;
-        const contenu = this.contenu;
-        const imageUrl = this.imageUrl;
-        const id = this.messageId;
-       // const idToDelete = req.params.id;
-        models.Message.findOne({
-            attributes: ['id','titre', 'contenu', 'imageUrl'],
-            where: { id: id}
+       // determination du message à modifier
+           var messageId = req.params.id ;
+             console.log(messageId);
+       
+        models.Message.findOne ({
+         where: {id: messageId}, 
+          include: [{    
+              model: models.User,
+              where: { id: userId},
+          }]                      
         }).then(function(messageFound) {
-           console.log(messageFound);
-            const deletedMessage = messageFound.delete({
+            const deletedMessage = messageFound.destroy({
             }).then(function(deletedMessage){
                 return res.status(200).json(({'message': 'Le message a été supprimé !'}))
             }).catch(function(err) {
@@ -170,4 +165,5 @@ module.exports = {
             res.status(500).json({'error': 'message introuvable'})
         });
     }
+    
 }

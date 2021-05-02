@@ -18,14 +18,15 @@ module.exports = {
        const prenom = req.body.prenom;
        const email = req.body.email;
        const password = req.body.password;
-       var isAdmin = false;
+       const isAdmin = false;
+       
 
-       if (nom == null || prenom == null || email == null || password == null ) {
+       if (nom == null || prenom == null || email == null || password == null || isAdmin == null) {
         return res.status(400).json({error: 'paramètre manquant'});
         }
 
         if (!EMAIL_REGEX.test(email)) {
-            return res.status(400).json({'error': 'email incorrect'})
+            return res.status(400).send({'error': 'email incorrect'})
         }
         if (!PASSWORD_REGEX.test(password)) {
             return res.status(400).json({'error': 'le password doit contenir une maj une min et un chiffre'})
@@ -42,7 +43,7 @@ module.exports = {
                         prenom: prenom,
                         email: email,
                         password: bcryptedPassword,
-                        isAdmin: 0,
+                        isAdmin: isAdmin,            ///// à 0
                     })
                     .then(function(newUser) {
                         return res.status(201).json({
@@ -92,7 +93,7 @@ module.exports = {
             return res.status(500).json({'error': 'verification impossibe'});
         })
     },
-    getUserProfile: function(req, res ) {
+    detailsUser: function(req, res ) {
         var headerAuth = req.headers ['authorization'];
         var userId = auth.getUserId(headerAuth);
         if (userId < 0)
@@ -111,7 +112,44 @@ module.exports = {
             res.status(500).json({'error': 'user introuvable'})
         });
     },
-    updateUserProfile: function(req, res) {
+  /*  updateUserProfile: function(req, res) {
+        //  récupération autorisation header
+        var headerAuth = req.headers ['authorization'];
+        var userId = auth.getUserId(headerAuth);
+
+        // declaration des parametres
+        
+       var nom = req.params.nom;
+        var prenom = req.params.prenom;
+        var email = req.params.email;
+        var password = req.params.password;
+        var isAdmin = req.params.isAdmin;
+        models.User.findOne({
+        //    attributes: ['id'],  ////  , 'isAdmin'   tout
+            where: { id: userId}
+        }).then(function(userFound) {
+            if (userFound) {
+                console.log(userFound);
+            }
+
+            const modifiedUser = userFound.update({
+                nom: (nom ? nom : user.nom),
+                prenom: (prenom ? prenom : user.prenom),
+                email: (email ? email : user.email),
+                isAdmin: ( isAdmin ? isAdmin : user.isAdmin),
+                password: ( password ? password : user.password),
+
+            }).then(function(modifiedUser){
+                return res.status(200).json(({'message': 'Le profile a été modifié !'}))
+            }).catch(function(err) {
+                res.status(500).json({'error': 'Le profile ne peut etre modifié'})
+            });
+
+        }).catch(function(err) {
+            res.status(500).json({'error': 'user introuvable'})
+        });
+    },*/
+    modifyUser: function(req, res) {
         //  récupération autorisation header
         var headerAuth = req.headers ['authorization'];
         var userId = auth.getUserId(headerAuth);
@@ -122,13 +160,13 @@ module.exports = {
         const prenom = req.body.prenom;
         const email = req.body.email;
         const isAdmin = req.body.isAdmin;
+        const password = req.body.password;
 
         models.User.findOne({
-            attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],  ////  , 'isAdmin'
+            attributes: ['id','nom', 'prenom', 'email', 'isAdmin', 'password'],  ////  , 'isAdmin'
             where: { id: userId}
         }).then(function(userFound) {
             if (userFound) {
-                res.status(201).json(userFound);
             }
 
             const modifiedUser = userFound.update({
@@ -146,34 +184,29 @@ module.exports = {
         }).catch(function(err) {
             res.status(500).json({'error': 'user introuvable'})
         });
-    },
 
+    }, 
     deleteUser: function(req, res) {
         //  récupération autorisation header
         var headerAuth = req.headers ['authorization'];
         var userId = auth.getUserId(headerAuth);
 
         // declaration des parametres
+        var userId = req.params.id;
         
-        const nom = req.body.nom;
-        const prenom = req.body.prenom;
-        const email = req.body.email;
-        const isAdmin = req.body.isAdmin;
+       console.log(userId);
 
         models.User.findOne({
-            attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],
-            where: { id: id}
+          // attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],
+            where: { id: userId}
         }).then(function(userFound) {
             if (userFound) {
-                res.status(201).json(userFound);
+             // return res.status(200).json(userFound);
+             //console.log(userFound);
             }
 
             const deletedUser = userFound.destroy({
-                nom: (nom ? nom : user.nom),
-                prenom: (prenom ? prenom : user.prenom),
-                email: (email ? email : user.email),
-                isAdmin: ( isAdmin ? isAdmin : user.isAdmin),
-
+                
             }).then(function(deletedUser){
                 return res.status(200).json(({'message': 'Le profile a été supprimé !'}))
             }).catch(function(err) {
@@ -181,11 +214,74 @@ module.exports = {
             });
 
         }).catch(function(err) {
+            console.log(err);
             res.status(500).json({'error': 'user introuvable'})
         });
            
        
     },
-}
+    
+  /*  deleteUser: function(req, res) {
+        //  récupération autorisation header
+        var headerAuth = req.headers ['authorization'];
+        var userId = auth.getUserId(headerAuth);
+        // declaration des parametres
+        var  userId2 = req.params.id;
+        
+        console.log(userId2);
+        models.User.findOne({
+          // attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],
+            where: { id: userId2}
+        })
+            if (userId == userId2) {
+                    console.log(userId, userId2);
+             // return res.status(200).json(userFound);
+             //console.log(userFound);
+            
+
+                         
+            .then(function(userFound) {
+                
+            }
+                return res.status(200).json(({'message': 'Le profile a été supprimé !'}));
+           
+        
+        }else {
+            res.status(404).json({'error': 'Le profile ne peut etre supprimé !' });
+            console.log(userId, userId2)
+        }
+           
+    }  
+    }, */
+    listeUsers: function (req, res) {
+        var headerAuth = req.headers ['authorization'];
+        var userId = auth.getUserId(headerAuth);
+
+       // var fields = req.query.fields;  // selectionner les colonnes souhaitées
+       // var order = req.query.order;  //  ordre d'affichage des messages
+
+        models.User.findAll({
+          //  where: {id: userId},
+         //  attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
+          // order: [(order != null) ? order.split(':') : ['titre', 'ASC']],
+           attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],
+        }).then(function(users){
+            if (users) {
+                res.status(200).json(users);
+            }else {
+                res.status(404).json({'error': 'aucun user trouvé !'});
+            }
+        }).catch(function(err){
+            res.status(500).json({'error' : 'champs invalides'})
+        })
+    }
+    
+} 
+
+        
+       
+    
+    
+
 
 

@@ -13,6 +13,7 @@ messageRouter.route('/messages/create/').post( multer, messagesCtrl.createMessag
 messageRouter.route('/messages/modify/:id').put( multer, messagesCtrl.modifyMessage);
 messageRouter.route('/messages/delete/:id').delete( multer, messagesCtrl.deleteMessage);
 messageRouter.route('/messages/display/').get(multer, messagesCtrl.listeMessages);
+messageRouter.route('/messages/display/:id').get(multer, messagesCtrl.DetailsMessage);
 
 return messageRouter;
 })();

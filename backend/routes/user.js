@@ -10,8 +10,9 @@ exports.router = (function() {
 // Users routes
 userRouter.route('/users/signup/').post(usersCtrl.signup);
 userRouter.route('/users/login/').post(usersCtrl.login);
-userRouter.route('/users/display/').get(usersCtrl.getUserProfile);
-userRouter.route('/users/modify/:d').put(usersCtrl.updateUserProfile);
+userRouter.route('/users/display/:id').get(usersCtrl.detailsUser);
+userRouter.route('/users/display/').get(usersCtrl.listeUsers);
+userRouter.route('/users/modify/:id').put(usersCtrl.modifyUser);
 userRouter.route('/users/delete/:id').delete(usersCtrl.deleteUser);
 
 
