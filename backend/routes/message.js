@@ -1,4 +1,4 @@
-//  imprtations
+//  importations
 const express = require('express');
 const messagesCtrl = require('../controllers/message');
 const multer = require('../middleware/multer-config');

@@ -6,9 +6,10 @@ module.exports = (sequelize, DataTypes) => {
   class Message extends Model {
     
     static associate(models) {
-      // define association here
+      //  association messages/User
       models.Message.belongsTo(models.User, {
-        foreignKey: {
+        // la clé de la relation étrangère ne doit pas etre  nulle
+        foreignKey: {   
           allowNull: false
         }
       })

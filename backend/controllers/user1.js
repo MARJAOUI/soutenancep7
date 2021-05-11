@@ -12,37 +12,43 @@ const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/;  /// une maj un
 // routes
 
 module.exports = {
+
+    ///  creation d'un user
     signup: function (req, res) {
-       // parametres 
+       // Récupération des parametres du user
        const nom = req.body.nom;
        const prenom = req.body.prenom;
        const email = req.body.email;
        const password = req.body.password;
        const isAdmin = req.body.isAdmin;
-
+       
+        // vérification qu'il n y a pas de parametre manquant
        if (nom == null || prenom == null || email == null || password == null || isAdmin == null) {
         return res.status(400).json({error: 'paramètre manquant'});
         }
 
+        // controle de l'Email et du password avec les  REGEX prédéfinis
         if (!EMAIL_REGEX.test(email)) {
             return res.status(400).send({'error': 'email incorrect'})
         }
         if (!PASSWORD_REGEX.test(password)) {
             return res.status(400).json({'error': 'le password doit contenir une maj une min et un chiffre'})
         } 
+
+        //Vérification de l'existatnce ou pas du User
         models.User.findOne({
             attributes: ['email'],
             where: { email: email}
         })  
         .then(function(userFound){
             if (!userFound) {
-                bcrypt.hash(password, 5, function(err, bcryptedPassword) {
+                bcrypt.hash(password, 5, function(err, bcryptedPassword) { // hachage du password
                     var newUser = models.User.create({    
                         nom: nom,
                         prenom: prenom,
                         email: email,
                         password: bcryptedPassword,
-                        isAdmin: isAdmin,            ///// à 0
+                        isAdmin: isAdmin,            
                     })
                     .then(function(newUser) {
                         return res.status(201).json({
@@ -61,24 +67,29 @@ module.exports = {
             return res.status(500).json({'error': 'on ne peut créer le user'});
         });
     },
+//// Connection d'un user
+
     login: function(req, res) {
-        // parametres
+        // récupération des parametres de connection
         const email = req.body.email;
         const password = req.body.password;
 
+        // vérification qu'il n y a pas de parametre manquant
         if (email == null || password == null) {
             return res.status(400).json({'error': 'parametre manquant'});
         }
-        models.User.findOne({
+
+        // Récupération du user avec son Email
+        models.User.findOne({ 
             where: {email: email}
         })
         .then(function(userFound) {
             if (userFound) {
-                bcrypt.compare(password, userFound.password, function(err, resBcrypt) {
+                bcrypt.compare(password, userFound.password, function(err, resBcrypt) { // comparaison du password
                     if (resBcrypt) {
                         return res.status(200).json({
                             'userId': userFound.id,
-                            'token': auth.generateTokenForUser(userFound)
+                            'token': auth.generateTokenForUser(userFound)// token généré dans jwt-auth.js
                         });
                     }else {
                         return res.status(403).json({'error': 'password invalide'});
@@ -92,14 +103,19 @@ module.exports = {
             return res.status(500).json({'error': 'verification impossibe'});
         })
     },
+
+    ///  afiicher detail d'un user
     detailsUser: function(req, res ) {
+
+        //Vérification de l'authentification et Récuperation de l'identifiant du user
         var headerAuth = req.headers ['authorization'];
-        var {userId} = auth.getUserId(headerAuth);
+        var userId = auth.getUserId(headerAuth);
         if (userId < 0)
         return res.status(400).json({'error' : 'token erronné'});
-      //  const userId2 = req.params.id;
+
+        // récupération du user à afficher
         models.User.findOne({
-            attributes: ['id', 'nom', 'prenom', 'email'],
+            attributes: ['id', 'nom', 'prenom', 'email'], // attributs a afficher
             where: { id: userId}
         }).then(function(user) {
             if (user) {
@@ -111,10 +127,12 @@ module.exports = {
             res.status(500).json({'error': 'user introuvable'})
         });
     },
+  
+    ///   modification d'un user
     modifyUser: function(req, res) {
-        //  récupération autorisation header
+        //Vérification de l'authentification et Récuperation de l'identifiant du user
         var headerAuth = req.headers ['authorization'];
-        var {userId} = auth.getUserId(headerAuth);
+        var userId = auth.getUserId(headerAuth);
 
         // declaration des parametres
         
@@ -122,16 +140,17 @@ module.exports = {
         const prenom = req.body.prenom;
         const email = req.body.email;
         const isAdmin = req.body.isAdmin;
+        const password = req.body.password;
 
         models.User.findOne({
-            attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],  ////  , 'isAdmin'
+            attributes: ['id','nom', 'prenom', 'email', 'isAdmin', 'password'],  ////  , 'isAdmin'
             where: { id: userId}
         }).then(function(userFound) {
             if (userFound) {
             }
-
+            // modification des parametres du user
             const modifiedUser = userFound.update({
-                nom: (nom ? nom : user.nom),
+                nom: (nom ? nom : user.nom),// si parametre ok je valide sinon je conserve l'ancien paramètre
                 prenom: (prenom ? prenom : user.prenom),
                 email: (email ? email : user.email),
                 isAdmin: ( isAdmin ? isAdmin : user.isAdmin),
@@ -145,19 +164,21 @@ module.exports = {
         }).catch(function(err) {
             res.status(500).json({'error': 'user introuvable'})
         });
-    },
-    ///  lister les users
 
-    listeUsers: function (req, res) {
+    }, 
+    
+    
+      listeUsers: function (req, res) {
         var headerAuth = req.headers ['authorization'];
-        var {userId, isAdmin }= auth.getUserId(headerAuth);
-        var fields = req.query.fields;  // selectionner les colonnes souhaitées
-        var order = req.query.order;  //  ordre d'affichage des messages
+        var userId = auth.getUserId(headerAuth);
+
+       // var fields = req.query.fields;  // selectionner les colonnes souhaitées
+       // var order = req.query.order;  //  ordre d'affichage des messages
 
         models.User.findAll({
           //  where: {id: userId},
-           attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-           order: [(order != null) ? order.split(':') : ['nom', 'ASC']],
+         //  attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
+          // order: [(order != null) ? order.split(':') : ['titre', 'ASC']],
            attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],
         }).then(function(users){
             if (users) {
@@ -169,39 +190,67 @@ module.exports = {
             res.status(500).json({'error' : 'champs invalides'})
         })
     },
-    // suppression d'un user
+   /* deleteUser: function(req, res) {
+        //Vérification de l'authentification et Récuperation de l'identifiant du user
+        var headerAuth = req.headers ['authorization'];
+        var userId = auth.getUserId(headerAuth);
 
+        //console.log(userId)
+        // declaration des parametres
+        var userId = req.params.id;  // efface tous les profils
+       // var isAdmin = req.params.isAdmin
+       console.log(userId);
+
+        models.User.findOne({
+         //  attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],
+            where: { id: userId,}
+        }).then(function(userFound) {
+            if (userFound) {
+            // return res.status(200).json(userFound);
+             console.log(userFound);
+            }
+                const deletedUser = userFound.destroy({
+                    
+                }).then(function(deletedUser){
+                    return res.status(200).json(({'message': 'Le profile a été supprimé !'}))
+                }).catch(function(err) {
+                    res.status(500).json({'error': 'Le profile ne peut etre supprimé !'})
+                });
+            
+        }).catch(function(err) {
+            console.log(err);
+            res.status(500).json({'error': 'user introuvable'})
+        });
+           
+       
+    }*/
     deleteUser: function(req, res) {
         //  récupération autorisation header
         var headerAuth = req.headers ['authorization'];
-        var {userId} = auth.getUserId(headerAuth);
-        var {isAdmin} = auth.getUserId(headerAuth);
- 
+        var userId = auth.getUserId(headerAuth);
+
         // declaration des parametres
-        var userId2 = req.params.id;  
+        var userId = req.params.id;
         
-        console.log(userId);
+       console.log(userId);
 
         models.User.findOne({
           // attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],
-            where: { id: userId2}
+            where: { id: userId}
         }).then(function(userFound) {
-            
-            if (userId == userId2 || isAdmin == 1 ){
-                console.log(userId, userId2, isAdmin);
-            
+            if (userFound) {
+             // return res.status(200).json(userFound);
+             //console.log(userFound);
+            }
 
             const deletedUser = userFound.destroy({
                 
             }).then(function(deletedUser){
-                return res.status(200).json(({'message': 'Le profil a été supprimé !'}))
+                return res.status(200).json(({'message': 'Le profile a été supprimé !'}))
             }).catch(function(err) {
-                console.log(err);
-                res.status(500).json({'error': 'Le profil ne peut etre supprimé !'})
+                res.status(500).json({'error': 'Le profile ne peut etre supprimé !'})
             });
-            }else {
-                res.status(500).json({"error": "Vous n'etes pas autorisé à supprimer ce user !"}) 
-            }
+
         }).catch(function(err) {
             console.log(err);
             res.status(500).json({'error': 'user introuvable'})
@@ -210,7 +259,7 @@ module.exports = {
        
     },
     
-    
+   
 } 
 
         

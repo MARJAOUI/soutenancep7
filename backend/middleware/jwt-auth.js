@@ -3,33 +3,34 @@ const JWT_SIGN_SECRET = 'a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a11aan';
 
 //  fonctions exportées
 module.exports = {
+    // geration du token
     generateTokenForUser: function(userData){
         return jwt.sign({
             userId: userData.id,
+            isAdmin: userData.isAdmin,
         },
-        JWT_SIGN_SECRET, {
-            expiresIn: '24h'
+        JWT_SIGN_SECRET, {  //  Signature du Token à l'aide de constante
+            expiresIn: '24h' //  durée de validité du token
         })
     },
     parseAuthorization: function(authorization){
-       // return (authorization != null) ? authorization.replace('Bearer ', '') : null; 
        if (authorization != null) {  
-        return   authorization.split(' ')[1]
+        return   authorization.split(' ')[1] // récupération authorisation sans Bearer et l'esapce suivant
     } 
     },
-    //extractToken: function(req) {
-     //   return req.headers.authorization.split(' ')[1];   ////  const token = req.headers.authorization.split(' ')[1];
-   // },
+    
     getUserId: function(authorization){
-        var userId = -1;
+        var userId = -1;  // démarrer la requete sur id inexistant
+        var isAdmin = 0;
         var token = module.exports.parseAuthorization(authorization);
         if(token != null) {
             try {
-                const jwtToken = jwt.verify(token, JWT_SIGN_SECRET);
+                const jwtToken = jwt.verify(token, JWT_SIGN_SECRET); // verification du token
                 if(jwtToken != null)
-                    userId = jwtToken.userId;
+                 userId = jwtToken.userId;//  récuperation de l'id generé ligne 11
+                 isAdmin = jwtToken.isAdmin;
             } catch(err) {}
         }
-        return userId;
+        return {userId, isAdmin};
     }
 }

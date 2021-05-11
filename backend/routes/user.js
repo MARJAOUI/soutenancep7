@@ -1,4 +1,4 @@
-//  imprtations
+//  importations
 const express = require('express');
 const usersCtrl = require('../controllers/user');
 
@@ -10,7 +10,7 @@ exports.router = (function() {
 // Users routes
 userRouter.route('/users/signup/').post(usersCtrl.signup);
 userRouter.route('/users/login/').post(usersCtrl.login);
-userRouter.route('/users/display/:id').get(usersCtrl.detailsUser);
+userRouter.route('/users/me/:id').get(usersCtrl.detailsUser);
 userRouter.route('/users/display/').get(usersCtrl.listeUsers);
 userRouter.route('/users/modify/:id').put(usersCtrl.modifyUser);
 userRouter.route('/users/delete/:id').delete(usersCtrl.deleteUser);

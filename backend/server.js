@@ -2,15 +2,16 @@
 const http =require('http');
 const app = require('./app');
 const express = require('express');
-
 const bodyParser = require('body-parser');
 const messageRouter = require('./routes/message').router;
 const userRouter = require('./routes/user').router;
 
 
-// instantations serveur
+// instancations serveur
 
 const server = express();
+
+// configuration du serveur
 server.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');

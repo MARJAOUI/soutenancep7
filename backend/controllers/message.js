@@ -7,14 +7,13 @@ const message = require('../models/user');
 const multer = require('../middleware/multer-config')
 const fs = require('fs');
 const FormData = require('form-data');
-const asynclib = require('async')
 module.exports = {
     
     createMessage: function (req, res, next) {
 
         //  récupération autorisation
         var headerAuth = req.headers ['authorization'];
-        var userId = auth.getUserId(headerAuth); ////    var userId = auth.getUserId();     
+        var {userId} = auth.getUserId(headerAuth); ////    var userId = auth.getUserId();     
 
         //  paramètres
         const message = [    
@@ -23,53 +22,50 @@ module.exports = {
         imageUrl = `${req.protocol}://${req.get('host')}`  
     ]   
         
-        if (titre == null || contenu == null|| imageUrl == null) {     
+        if (titre == null || contenu == null) {        //// || imageUrl == null
             return res.status(400).json({'error': '  un parametre manquant'});
         }
-        asynclib.waterfall([
-            function(done) {
-                models.User.findOne({
-                    where: {id: userId}
+       
+
+ var userFound = models.User.findOne({
+            where: { id: userId }
+        })  
+        .then(function(userFound){
+            console.log(userFound);   
+            if (userFound) {         
+                const newMessage = models.Message.create( {
+                    titre: titre,
+                    contenu: contenu,
+                    imageUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}`,  
+                    UserId: userFound.id  // lien entre le user et le message créé
                 })
-                .then(function(userFound) {
-                    done(null, userFound);
+                .then(function(newMessage) {
+                    if (newMessage) {
+                        return res.status(201).json(newMessage);
+                    }else {
+                        return res.status(500).json({'error': 'le message ne peut etre créé !'});
+                    }
                 })
-                .catch(function(err) {
-                    return res.status(500).json({'error': 'unable to verify user'});
-                });
-            },
-            function(userFound, done) {
-                if(userFound){
-                    models.Message.create({
-                        titre : titre,
-                        contenu : contenu,
-                        imageUrl  : `${req.protocol}://${req.get('host')}/${req.file.filename}`,  
-                        UserId: userFound.id  // lien entre le user et le message créé
-                    })
-                    .then(function(newMessage){
-                        done(newMessage);
-                    });
-                } else {
-                    res.status(404).json({'error': 'user not found'});
-                }
-            },
-            ], function(newMessage) {
-                if (newMessage) {
-                    return res.status(201).json(newMessage);
-                } else {
-                    return res.status(500).json({'error': 'cannot post message'})
-                }
-            });
-},
+            }else {
+                return res.status(500).json({'error': 'user non trouvé'}); 
+            }
+        })
+        .catch(function(err) {
+            return res.status(500).json({'error': 'vérification user impossibe'});
+            })
+        },
+/////////////////////////////////////////////////////////////
     listeMessages: function (req, res) {
         var fields = req.query.fields;  // selectionner les colonnes souhaitées
         var order = req.query.order;  //  ordre d'affichage des messages
+
+        /// récupération de tous les messages
         models.Message.findAll({
            attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
            order: [(order != null) ? order.split(':') : ['titre', 'ASC']],
             include: [{    
                 model: models.User,
-                attributes: ['nom', 'prenom']  // infos affichés avec le message
+                attributes: ['nom', 'prenom']  // infos du user affichés avec le message
             }]
         }).then(function(messages){
             if (messages) {
@@ -143,14 +139,14 @@ module.exports = {
     deleteMessage: function(req, res) {
         //  récupération autorisation header
         var headerAuth = req.headers ['authorization'];
-          var userId = auth.getUserId(headerAuth);
+          var {userId} = auth.getUserId(headerAuth);
        // determination du message à modifier
            var messageId = req.params.id ;
              console.log(messageId);
-       
-        models.Message.findOne ({
+       // Récupération du message à supprimer
+        models.Message.findOne ({     
          where: {id: messageId}, 
-          include: [{    
+          include: [{    //  lien Message/User
               model: models.User,
               where: { id: userId},
           }]                      
