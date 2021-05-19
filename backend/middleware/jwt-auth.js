@@ -6,19 +6,18 @@ module.exports = {
     // geration du token
     generateTokenForUser: function(userData){
         return jwt.sign({
-            userId: userData.id,
-            isAdmin: userData.isAdmin,
+            userId: userData.id,   // parametre nécessaire
+            isAdmin: userData.isAdmin, // parametre nécessaire
         },
-        JWT_SIGN_SECRET, {  //  Signature du Token à l'aide de constante
+        JWT_SIGN_SECRET, {  //  Signature du Token à l'aide de la  constante
             expiresIn: '24h' //  durée de validité du token
         })
     },
     parseAuthorization: function(authorization){
        if (authorization != null) {  
-        return   authorization.split(' ')[1] // récupération authorisation sans Bearer et l'esapce suivant
+            return   authorization.split(' ')[1] // récupération authorisation sans Bearer et l'esapce suivant
     } 
     },
-    
     getUserId: function(authorization){
         var userId = -1;  // démarrer la requete sur id inexistant
         var isAdmin = 0;
@@ -31,6 +30,6 @@ module.exports = {
                  isAdmin = jwtToken.isAdmin;
             } catch(err) {}
         }
-        return {userId, isAdmin};
+             return {userId, isAdmin};
     }
 }

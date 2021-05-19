@@ -7,27 +7,25 @@ const message = require('../models/user');
 const multer = require('../middleware/multer-config')
 const fs = require('fs');
 const FormData = require('form-data');
-module.exports = {
-    
-    createMessage: function (req, res, next) {
+var moment = require('moment');
 
+moment().format('LLL'); 
+module.exports = {
+    createMessage: function (req, res, next) {
         //  récupération autorisation
         var headerAuth = req.headers ['authorization'];
-        var {userId} = auth.getUserId(headerAuth); ////    var userId = auth.getUserId();     
-
+        var {userId} = auth.getUserId(headerAuth); ////    var userId = auth.getUserId();  
+        var {isAdmin} = auth.getUserId(headerAuth);   
         //  paramètres
         const message = [    
         titre = req.body.titre,
         contenu = req.body.contenu,
-        imageUrl = `${req.protocol}://${req.get('host')}`  
-    ]   
-        
+        imageUrl = req.file && `${req.protocol}://${req.get('host')}`  
+        ]   
         if (titre == null || contenu == null) {        //// || imageUrl == null
             return res.status(400).json({'error': '  un parametre manquant'});
         }
-       
-
- var userFound = models.User.findOne({
+        var userFound = models.User.findOne({
             where: { id: userId }
         })  
         .then(function(userFound){
@@ -36,7 +34,7 @@ module.exports = {
                 const newMessage = models.Message.create( {
                     titre: titre,
                     contenu: contenu,
-                    imageUrl: `${req.protocol}://${req.get('host')}/${req.file.filename}`,  
+                    imageUrl:  req.file && `${req.protocol}://${req.get('host')}/${req.file?.filename}`,  //   req.file &&
                     UserId: userFound.id  // lien entre le user et le message créé
                 })
                 .then(function(newMessage) {
@@ -51,6 +49,7 @@ module.exports = {
             }
         })
         .catch(function(err) {
+            console.log(err);
             return res.status(500).json({'error': 'vérification user impossibe'});
             })
         },
@@ -61,8 +60,8 @@ module.exports = {
 
         /// récupération de tous les messages
         models.Message.findAll({
-           attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-           order: [(order != null) ? order.split(':') : ['titre', 'ASC']],
+            attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
+            order: [(order != null) ? order.split(':') : ['titre', 'ASC']],
             include: [{    
                 model: models.User,
                 attributes: ['nom', 'prenom']  // infos du user affichés avec le message
@@ -115,7 +114,7 @@ module.exports = {
             console.log(messageId);
       models.Message.findOne ({
         attributes: [ 'id', 'titre', 'contenu', 'imageUrl'],
-       where: {id: messageId}, 
+        where: {id: messageId}, 
         include: [{    
             model: models.User,
             attributes: ['id'],
@@ -139,26 +138,26 @@ module.exports = {
     deleteMessage: function(req, res) {
         //  récupération autorisation header
         var headerAuth = req.headers ['authorization'];
-          var {userId} = auth.getUserId(headerAuth);
+        var {userId} = auth.getUserId(headerAuth);
        // determination du message à modifier
-           var messageId = req.params.id ;
-             console.log(messageId);
+        var messageId = req.params.id ;
+        console.log(messageId);
        // Récupération du message à supprimer
         models.Message.findOne ({     
-         where: {id: messageId}, 
-          include: [{    //  lien Message/User
-              model: models.User,
-              where: { id: userId},
-          }]                      
-        }).then(function(messageFound) {
-            const deletedMessage = messageFound.destroy({
-            }).then(function(deletedMessage){
-                return res.status(200).json(({'message': 'Le message a été supprimé !'}))
+            where: {id: messageId}, 
+            include: [{    //  lien Message/User
+               model: models.User,
+               where: { id: userId},
+            }]                      
+            }).then(function(messageFound) {
+                const deletedMessage = messageFound.destroy({
+                }).then(function(deletedMessage){
+                    return res.status(200).json(({'message': 'Le message a été supprimé !'}))
+                }).catch(function(err) {
+                    res.status(500).json({'error': 'Le message ne peut etre supprimé !'})
+                });
             }).catch(function(err) {
-                res.status(500).json({'error': 'Le message ne peut etre supprimé !'})
-            });
-        }).catch(function(err) {
-            res.status(500).json({'error': 'message introuvable'})
+                res.status(500).json({'error': 'message introuvable'})
         });
     }
     
