@@ -1,5 +1,6 @@
 <template>
     <Header2 />
+    <ConnectedProfile />
         <div id="container ">
             <h1 class="titre is-size-1">Modifier et Valider </h1>
             <div id="formulaire">
@@ -18,9 +19,9 @@
                 <label class="form_col_label" for="pass">Password </label>
                 <input class="form_col_champ" name="password" id="pass"   type="password"  placeholder= "+8car +1min +1maj +1num" v-model="user.password" >
                 <br /><br />
-                <div>              
-                <input @click="modification" class="btn" type="submit" value="Soumettre" /> 
-                <input type="checkbox" @click="showMDP()">Show Password
+                <div class="marge_btn">              
+                    <div><input @click="modification" class="btn" type="submit" value="Soumettre" /> </div>
+                    <div><input type="checkbox" @click="showMDP()"> <p>Show Password </p> </div>
                 </div>
             </div>
         </div>
@@ -28,13 +29,14 @@
 </template>
 
 <script>
+import ConnectedProfile from '@/components/ConnectedProfile.vue'
 import Header2 from '@/components/Header2.vue';
 import Footer from '@/components/Footer.vue';
 import axios from "axios";
 export default {
     name: "ModifyUser",
     components: {
-        Header2, Footer  
+        Header2, Footer, ConnectedProfile  
     },
     data() {
         return {
@@ -112,5 +114,11 @@ export default {
   text-align: center;
   border-radius: 10px;
   background-color:  #F4511E;
+}
+.marge_btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 50px;
 }
 </style>

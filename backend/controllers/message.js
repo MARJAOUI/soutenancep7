@@ -35,6 +35,7 @@ module.exports = {
                     titre: titre,
                     contenu: contenu,
                     imageUrl:  req.file && `${req.protocol}://${req.get('host')}/${req.file?.filename}`,  //   req.file &&
+                    createdAt: createdAt,
                     UserId: userFound.id  // lien entre le user et le message créé
                 })
                 .then(function(newMessage) {
@@ -61,7 +62,7 @@ module.exports = {
         /// récupération de tous les messages
         models.Message.findAll({
             attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-            order: [(order != null) ? order.split(':') : ['titre', 'ASC']],
+            order: [(order != null) ? order.split(':') : ['createdAt', 'ASC']],
             include: [{    
                 model: models.User,
                 attributes: ['nom', 'prenom']  // infos du user affichés avec le message

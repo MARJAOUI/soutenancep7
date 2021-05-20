@@ -16,9 +16,9 @@
                             </div> 
                             
                         </div>
-                        <div >
+                        <div v-show="message.imageUrl">
                             <p><img :src="message.imageUrl" id="message_image" alt=""/></p>
-                        </div>
+                        </div> 
                     </div>
                     <div class="boutons">
                         <input @click="()=> deleteMessage(message.id)"  type="submit" class="btn"   value="Supprimer Message" /> 
@@ -46,12 +46,9 @@ export default {
         }
     },
     mounted(){ 
-        /*const createdAt
+        /*
         moment(createdAt).format('LLL')
-        .then(res => {
-                    const dateCreation = res.dateCreation;
-                    this.message.createdAt = dateCreation;
-            });*/
+        */
       
         const config = {
         headers: { Authorization: "Bearer " + localStorage.token } 
@@ -166,14 +163,13 @@ span {
 }
 .btn {
   border: 0;
-  line-height: 2;
+  line-height: 2.5;
   padding: 0 20px;
   margin-top: 20px;
-  font-size: 10px;
+  font-size: 20px;
   text-align: center;
   border-radius: 10px;
-  background-color: #F4511E;
-  text-decoration: none;
+  background-color:  #F4511E;
 }
 #message_image {
     width: 100%;

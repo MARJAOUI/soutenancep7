@@ -1,5 +1,6 @@
 <template>
   <Header2 />
+  <ConnectedProfile />
     <div id="nav" class="boutons">
       <input @click="suppression" id="supprimer user"  type="submit" class="btn"   value="Veuiller confirmer la suppression du User" />  
     </div>
@@ -10,6 +11,7 @@
   <Footer />
 </template>
 <script>
+import ConnectedProfile from '@/components/ConnectedProfile.vue'
 import Header2 from '@/components/Header2.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
@@ -21,7 +23,7 @@ export default {
     }
   },
   components: { 
-    Header2, Footer
+    Header2, Footer, ConnectedProfile
   },
   mounted(userId){  
     const config = {

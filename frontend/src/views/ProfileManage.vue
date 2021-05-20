@@ -1,19 +1,25 @@
 <template>
   <Header3 />
+    <h1> Gestion de votre Profil </h1>
     <div id="nav" >
       <router-link id="btn" v-bind:to="'/ModifyUser/'">Modifier Profil  </router-link>
       <router-link id="btn" v-bind:to="'/DeleteUser'">Supprimer Profil  </router-link>
       <router-link id="btn" v-bind:to="'/DisplayUsers/'">Annuaire Utilisateurs  </router-link>
     </div>
     <div><hr></div>
+    <ConnectedProfile />
+
       <img alt="Vue logo" src="../assets/images/profil.jpg">  
     <div class="home">
       <img alt="Vue logo" src="../assets/images/icon-above-font2.png">  
     </div>
+    <p id="profil_connecté">Profil Connecté : {{user.nom}} {{user.prenom}}</p>
     <router-view/>
   <Footer />
 </template>
 <script>
+import axios from 'axios';
+import ConnectedProfile from '@/components/ConnectedProfile.vue'
 import Header3 from '@/components/Header3.vue';
 import Footer from '@/components/Footer.vue';
 export default {
@@ -21,11 +27,22 @@ export default {
   data () {
        return {
          users:  "",
+         user: "",
        }
   },
   components: { 
-      Header3, Footer
+      Header3, Footer, ConnectedProfile
   },
+  mounted(){ 
+        const config = {
+        headers: { Authorization: "Bearer " + localStorage.token } 
+        }
+        axios.get("http://localhost:3000/api/users/me/" + this.user.id ,config )
+            .then(res => {
+                    const data = res.data;
+                    this.user = data;
+            });
+    },
 }
 </script>
 <style>
@@ -50,5 +67,10 @@ export default {
   height: 7px;
   background-color:  #F4511E;
   border: none;
+}
+#profil_connecté{
+  text-align: right;
+  font-size: 15px;
+  font-weight: bold; 
 }
 </style>

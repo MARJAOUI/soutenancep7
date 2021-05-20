@@ -19,9 +19,9 @@
                 <input class="form_col_champ" name="password" id="pass"   type="Password" placeholder= "+8car +1min +1maj +1num"  v-model="user.password" >
                 <br /><br />
                 
-                <div>              
-                <input @click="inscription" id="valider_signup" class="btn" type="submit" value="Envoyer" /> 
-                <input type="checkbox" @click="showMDP()">Show Password
+                <div class="marge_btn">              
+                    <div><input @click="modification" class="btn" type="submit" value="Soumettre" /> </div>
+                    <div><input type="checkbox" @click="showMDP()"> <p>Show Password </p> </div>
                 </div>
                 <!--<input @click="inscription" id="valider_signup"  type="submit" class="btn_4 styled"   value="Envoyer" />-->
             </div>
@@ -115,5 +115,11 @@ export default {
 .form_col_champ{
  width: 200px;
  height: 25px;   
+}
+.marge_btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 50px;
 }
 </style>
