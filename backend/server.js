@@ -22,11 +22,9 @@ server.use((req, res, next) => {
 server.use(bodyParser.urlencoded({ extended: true}));
 server.use(bodyParser.json());
 
-
-
 server.get ('/', function (req, res) {
     res.setHeader('Content-Type', 'text/html');
-    res.status(200).send('<h1>Bonjour sur mon premier Server local</h1>'); /// texte à afficher sur page
+    res.status(200).send('<h1>Bonjour sur mon premier Server local</h1>'); /// texte à afficher sur page pour des tests
 });
 
 // configuration des routes

@@ -1,7 +1,7 @@
 <template>
     <Header3 />
         <div id="container">
-            <p id="presentation" >Bonjour {{user.nom}} {{user.prenom}}</p>  
+        <ConnectedProfile />    
             <p id="message_accueil"> Messages à consulter ! </p>
             <ul id="list" >
                 <li v-for="message in messages " :key="message.id" id="contour_message"   >  
@@ -14,7 +14,6 @@
                                 <p class="margeD">{{message.User.nom}}  {{ message.User.prenom}}</p>  
                                 <p class="margeD">{{getTime(message.createdAt)}}</p>                        
                             </div> 
-                            
                         </div>
                         <div v-show="message.imageUrl">
                             <p><img :src="message.imageUrl" id="message_image" alt=""/></p>
@@ -33,11 +32,12 @@
 import moment from 'moment';
 import Header3 from '@/components/Header3.vue'
 import Footer from '@/components/Footer.vue'
+import ConnectedProfile from '@/components/ConnectedProfile.vue'
 import axios from 'axios';
 export default {
     name: 'DisplayMessages',
     components: {
-      Header3, Footer
+      Header3, Footer, ConnectedProfile
     },
     data() { 
         return { 
@@ -54,14 +54,12 @@ export default {
                     const data = res.data;
                     this.messages = data;
             });
-
         axios.get("http://localhost:3000/api/users/me/" + this.user.id ,config )
             .then(res => {
                     const data = res.data;
                     this.user = data;
             });
     },
-    
     methods: {
         detailMessage(){
             const config = {
@@ -73,7 +71,6 @@ export default {
                 this.$router.push({ path: "/DisplayMessages" });
                 console.log(response.data);
             })
-           
         },
         deleteMessage(messageId){
             const config = {
@@ -95,7 +92,6 @@ export default {
         }
     }
 }
-
 </script>
 <style>
 #container {

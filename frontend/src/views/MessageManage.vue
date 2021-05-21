@@ -1,12 +1,12 @@
 <template>
   <Header2 />
+    <p id="presentation" >Bonjour {{user.nom}} {{user.prenom}}</p>
     <h1> Gestion de vos messages </h1>
     <div id="nav" class="boutons">
       <router-link id="btn" v-bind:to="'/DisplayMessages'">Liste des Messages  </router-link>
       <router-link id="btn" v-bind:to="'/CreateMessage'">Créer un  Message  </router-link>
     </div>
     <div class="hr"><hr></div>
-    <ConnectedProfile />
       <img alt="Vue logo" src="../assets/images/entreprise2.png">  
     <div class="home">
       <img alt="Vue logo" src="../assets/images/icon-above-font2.png">  
@@ -17,33 +17,37 @@
 </template>
 <script>
 import axios from 'axios';
-import ConnectedProfile from '@/components/ConnectedProfile.vue';
 import Footer from  '@/components/Footer.vue';
 import Header2 from '@/components/Header2.vue';
 export default {
   name: 'User',
   data () {
-       return {
-         messages:  "",
-         user: "",
-       }
+    return {
+      messages:  "",
+      user: "",
+    }
   },
   components: { 
-      Header2, Footer, ConnectedProfile  
+    Header2, Footer
   },
   mounted(){ 
-        const config = {
-        headers: { Authorization: "Bearer " + localStorage.token } 
-        }
-        axios.get("http://localhost:3000/api/users/me/" + this.user.id ,config )
-            .then(res => {
-                    const data = res.data;
-                    this.user = data;
-            });
-    },
+    const config = {
+    headers: { Authorization: "Bearer " + localStorage.token } 
+    }
+    axios.get("http://localhost:3000/api/users/me/" + this.user.id ,config )
+      .then(res => {
+        const data = res.data;
+        this.user = data;
+    });
+  },
 }
 </script>
 <style>
+#presentation {
+    font-size: 25px;
+    font-weight: bold;
+    padding-top: 30px;
+}
 #btn {
   border: 5px;
   line-height: 2;

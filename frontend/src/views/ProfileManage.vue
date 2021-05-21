@@ -24,24 +24,24 @@ import Footer from '@/components/Footer.vue';
 export default {
   name: 'User',
   data () {
-       return {
-         users:  "",
-         user: "",
-       }
+    return {
+      users:  "",
+      user: "",
+    }
   },
   components: { 
-      Header3, Footer, ConnectedProfile
+    Header3, Footer, ConnectedProfile
   },
   mounted(){ 
-        const config = {
-        headers: { Authorization: "Bearer " + localStorage.token } 
-        }
-        axios.get("http://localhost:3000/api/users/me/" + this.user.id ,config )
-            .then(res => {
-                    const data = res.data;
-                    this.user = data;
-            });
-    },
+    const config = {
+    headers: { Authorization: "Bearer " + localStorage.token } 
+    }
+    axios.get("http://localhost:3000/api/users/me/" + this.user.id ,config )
+    .then(res => {
+      const data = res.data;
+      this.user = data;
+    });
+  },
 }
 </script>
 <style>

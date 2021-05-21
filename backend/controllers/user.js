@@ -22,7 +22,7 @@ module.exports = {
        const password = req.body.password;
        const isAdmin = req.body.isAdmin;
 
-       if (nom == null || prenom == null || email == null || password == null ) {
+       if (nom == null || prenom == null || email == null || password == null || isAdmin == null ) {
             return res.status(400).json({error: 'paramètre manquant'});
         }
         if (!EMAIL_REGEX.test(email)) {
@@ -43,9 +43,7 @@ module.exports = {
                         prenom: prenom,
                         email: email,
                         password: bcryptedPassword,
-                        isAdmin: false,
-                    //    createdAt: createdAt,            ///// à 0
-
+                        isAdmin: isAdmin,
                     })
                     .then(function(newUser) {
                         return res.status(201).json({
@@ -185,21 +183,16 @@ module.exports = {
         var {isAdmin} = auth.getUserId(headerAuth);
  
         // declaration des parametres
-        var userId2 = req.params.id;  
         
+        var userId2 = req.params.id;  
         console.log(userId);
-
         models.User.findOne({
           // attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],
             where: { id: userId2}
         }).then(function(userFound) {
-            
             if (userId == userId2 || isAdmin == 1 ){
                 console.log(userId, userId2, isAdmin);
-            
-
             const deletedUser = userFound.destroy({
-                
             }).then(function(deletedUser){
                 return res.status(200).json(({'message': 'Le profil a été supprimé !'}))
             }).catch(function(err) {

@@ -35,7 +35,7 @@ export default {
         console.log(this.$route);
     },
     methods: {
-                connection () {
+        connection () {
             const config = {
                     headers: {
                         'Content-Type': 'application/json',
@@ -73,7 +73,6 @@ export default {
     font-size: 25px;
     margin-bottom: 30px;
 }
-
 .form_col_label {
     display: inline-block;
     margin-right: 15px;

@@ -15,7 +15,7 @@
                             <br />
                         </div> 
                             <div>
-                                <input @click="()=> deleteUser(user.id)" id="supprimer user"  type="hidden" class="btn"   value="Supprimer User" /> 
+                                <input @click="()=> deleteUser(user.id)" id="supprimer user"  type="submit" class="btn"   value="Supprimer User" /> 
                             </div>   
                         <div id="hr"> <hr id="hr"> </div> 
                     </li >
@@ -59,8 +59,6 @@ export default {
             }
             axios.delete('http://localhost:3000/api/users/delete/' + userId, config )
             .then(()  => {
-               // this.$router.push({ path: "/" });
-              
                 window.alert('le user a été supprimé !')
                  window.location.reload();
             })  
@@ -77,8 +75,6 @@ export default {
 
 <style>
 #container {
-    
-    
     background-color: #ffd9d9;
 }
 .flex {
@@ -104,7 +100,6 @@ export default {
 span {
     color: red;
 }
-
 .texte {
     font-size: 15px;
     text-align: left;
@@ -112,14 +107,15 @@ span {
 }
 .btn {
   border: 0;
-  line-height: 2.5;
+  line-height: 1.5;
   padding: 0 20px;
   margin-top: 20px;
-  font-size: 20px;
+  font-size: 10px;
   text-align: center;
   border-radius: 10px;
   background-color: #F4511E;
   text-decoration: none;
+  
 }
 #cadre {
     

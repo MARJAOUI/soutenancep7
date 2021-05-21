@@ -1,8 +1,8 @@
 <template>
     <div id="header">
-         <input  @click="accueil" id="bouton"  type="submit" class="btn_4" value="Deconnection " />
+        <input  @click="accueil" id="bouton"  type="submit" class="btn_4" value="Deconnection " />
         <img class="image_header"   src="../assets/images/icon-left-font2.png"  >
-         <input  @click="user" id="bouton"  type="submit" class="btn_4" value="Gestion du profile " />
+        <input  @click="user" id="bouton"  type="submit" class="btn_4" value="Gestion du profile " />
     </div>
 </template>
 

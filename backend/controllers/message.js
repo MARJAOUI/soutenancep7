@@ -1,5 +1,4 @@
 /// importations
-
 const bcrypt = require('bcrypt');
 const auth = require('../middleware/jwt-auth');
 var models = require('../models');
@@ -9,7 +8,6 @@ const fs = require('fs');
 const FormData = require('form-data');
 var moment = require('moment');
 
-moment().format('LLL'); 
 module.exports = {
     createMessage: function (req, res, next) {
         //  récupération autorisation
@@ -53,50 +51,7 @@ module.exports = {
             return res.status(500).json({'error': 'vérification user impossibe'});
             })
         },
-   /* createMessage: function (req, res, next) {
-        //  récupération autorisation
-        var headerAuth = req.headers ['authorization'];
-        var {userId} = auth.getUserId(headerAuth); ////    var userId = auth.getUserId();  
-        var {isAdmin} = auth.getUserId(headerAuth);   
-        //  paramètres
-        const message = [    
-        titre = req.body.titre,
-        contenu = req.body.contenu,
-        imageUrl = req.file && `${req.protocol}://${req.get('host')}`  
-        ]   
-        if (titre == null || contenu == null) {        //// || imageUrl == null
-            return res.status(400).json({'error': '  un parametre manquant'});
-        }
-        var userFound = models.User.findOne({
-            where: { id: userId }
-        })  
-        .then(function(userFound){
-            console.log(userFound);   
-            if (userFound) {         
-                const newMessage = models.Message.create( {
-                    titre: titre,
-                    contenu: contenu,
-                    imageUrl:  req.file && `${req.protocol}://${req.get('host')}/${req.file?.filename}`,  //   req.file &&
-                    createdAt: createdAt,
-                    UserId: userFound.id  // lien entre le user et le message créé
-                })
-                .then(function(newMessage) {
-                    if (newMessage) {
-                        return res.status(201).json(newMessage);
-                    }else {
-                        return res.status(500).json({'error': 'le message ne peut etre créé !'});
-                    }
-                })
-            }else {
-                return res.status(500).json({'error': 'user non trouvé'}); 
-            }
-        })
-        .catch(function(err) {
-            console.log(err);
-            return res.status(500).json({'error': 'vérification user impossibe'});
-            })
-        },*/
-/////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////
     listeMessages: function (req, res) {
         var fields = req.query.fields;  // selectionner les colonnes souhaitées
         var order = req.query.order;  //  ordre d'affichage des messages
@@ -104,7 +59,7 @@ module.exports = {
         /// récupération de tous les messages
         models.Message.findAll({
             attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-            order: [(order != null) ? order.split(':') : ['createdAt', 'ASC']],
+            order: [(order != null) ? order.split(':') : ['createdAt', 'DESC']],
             include: [{    
                 model: models.User,
                 attributes: ['nom', 'prenom']  // infos du user affichés avec le message
@@ -183,16 +138,16 @@ module.exports = {
         var headerAuth = req.headers ['authorization'];
         var {userId} = auth.getUserId(headerAuth);
        // determination du message à modifier
-        var messageId = req.params.id ;
-        console.log(messageId);
+        var messageId = req.params.id;
        // Récupération du message à supprimer
         models.Message.findOne ({     
             where: {id: messageId}, 
             include: [{    //  lien Message/User
                model: models.User,
-               where: { id: userId},
+               where: { id: userId},  
             }]                      
             }).then(function(messageFound) {
+                  /// ajouté
                 const deletedMessage = messageFound.destroy({
                 }).then(function(deletedMessage){
                     return res.status(200).json(({'message': 'Le message a été supprimé !'}))
@@ -203,5 +158,4 @@ module.exports = {
                 res.status(500).json({'error': 'message introuvable'})
         });
     }
-    
 }

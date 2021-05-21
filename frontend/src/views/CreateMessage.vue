@@ -42,22 +42,12 @@ export default {
   components: {
     Header3, Footer 
   },
- /* props: {
-      required: {type: String, value: "false"},
-      
-  },
-  mounted(){
-    document.getElementById("disabledImage").removeAttribute("required");
-  },*/
   methods: {
-    
     deletAttribute() 
-{
-  var removeAttr = document.getElementById("disabledImage")
-  removeAttr.removeAttribute("required");
-  
-},
-    
+    {
+      var removeAttr = document.getElementById("disabledImage")
+      removeAttr.removeAttribute("required");
+    },
     onFileUpload(evenement) {
           this.selectedFile = evenement.target.files[0];
     },
@@ -80,7 +70,6 @@ export default {
       })
       .catch(function (response) {
         window.alert('Veuiller compléter tous les champs svp !');
-      //  window.location.reload();
         console.log(response);
       });
     },
@@ -115,6 +104,4 @@ text-align: center;
 .margeHB{
   margin: 50px 0 50px 0;
 }
-
-
 </style>

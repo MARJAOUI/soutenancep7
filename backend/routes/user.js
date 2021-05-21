@@ -1,13 +1,11 @@
 //  importations
 const express = require('express');
 const usersCtrl = require('../controllers/user');
-
-
 // router
 
 exports.router = (function() {
     const userRouter = express.Router();
-// Users routes
+//  routes des Users
     userRouter.route('/users/signup/').post(usersCtrl.signup);
     userRouter.route('/users/login/').post(usersCtrl.login);
     userRouter.route('/users/me/:id').get(usersCtrl.detailsUser);

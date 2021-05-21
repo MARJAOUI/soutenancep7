@@ -18,6 +18,5 @@ export default {
 img {
     align-content: center;
 }
-
 </style>
 
