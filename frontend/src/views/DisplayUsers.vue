@@ -5,13 +5,13 @@
             <ConnectedProfile />
             <div class="flex">
                 <p id="message_accueil"> Annuaire Utilisateurs  </p>
-                <ul class="list" >
+                <ul class="list flex" >
                     <li v-for="user in users " :key="user.id"    >  
                         <div id="cadre">  
                             <p class="texte"><span >Nom: </span>{{user.nom}}</p>
                             <p class="texte"><span >Prenom: </span>{{user.prenom}}</p>
                             <p class="texte"><span >Email: </span>{{user.email}}</p>
-                            <p class="texte"><span>Créé le: </span>{{user.createdAt}}</p>
+                            <p class="texte"><span>Créé le: </span>{{getTime(user.createdAt)}}</p>
                             <br />
                         </div> 
                             <div>
@@ -25,10 +25,11 @@
     <Footer />  
 </template>
 <script>
-import ConnectedProfile from '@/components/ConnectedProfile.vue'
-import Header2 from '@/components/Header2.vue'
-import Footer from '@/components/Footer.vue'
+import ConnectedProfile from '@/components/ConnectedProfile.vue';
+import Header2 from '@/components/Header2.vue';
+import Footer from '@/components/Footer.vue';
 import axios from 'axios';
+import moment from 'moment';
 export default {
     name: 'DisplayMessages',
     components: {
@@ -67,6 +68,9 @@ export default {
                 window.alert("le user n'a pas été supprimé  !")
             });
         },
+         getTime(createdAt) {
+            return moment(createdAt).format('LLL');
+        }
     }
 }   
 </script>
@@ -81,11 +85,12 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: left;
 }
 #message_accueil {
     color: #f57a54;
     font-size: 25px;
+    text-decoration: underline;
 }
 .list {
     list-style-type: none;
@@ -101,7 +106,7 @@ span {
 }
 
 .texte {
-    font-size: 20px;
+    font-size: 15px;
     text-align: left;
     margin-left: 10px;  
 }
@@ -121,6 +126,7 @@ span {
     box-shadow: 5px 5px 8px #bb581e, -5px -5px 8px #bb581e;
     border-radius: 3%;
     background-color: cornflowerblue;
+    height: 150px;
 }
 .flex_entete {
     display: flex;

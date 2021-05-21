@@ -12,7 +12,7 @@
                             <br />
                             <div id="align_nom_date">   
                                 <p class="margeD">{{message.User.nom}}  {{ message.User.prenom}}</p>  
-                                <p class="margeD">{{message.createdAt}}</p>                        
+                                <p class="margeD">{{getTime(message.createdAt)}}</p>                        
                             </div> 
                             
                         </div>
@@ -30,7 +30,7 @@
     <Footer />  
 </template>
 <script>
-//import moment from 'moment';
+import moment from 'moment';
 import Header3 from '@/components/Header3.vue'
 import Footer from '@/components/Footer.vue'
 import axios from 'axios';
@@ -46,10 +46,6 @@ export default {
         }
     },
     mounted(){ 
-        /*
-        moment(createdAt).format('LLL')
-        */
-      
         const config = {
         headers: { Authorization: "Bearer " + localStorage.token } 
         }
@@ -94,6 +90,9 @@ export default {
             this.$router.push({query: {alert:'Vous ne pouvez pas supprimer ce message!'} });
             });
         },
+        getTime(createdAt) {
+            return moment(createdAt).format('llll')
+        }
     }
 }
 

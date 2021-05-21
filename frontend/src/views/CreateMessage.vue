@@ -1,6 +1,5 @@
 <template>
 <Header3 />
-<ConnectedProfile />
     <form class="flex flex-col" @submit.prevent="AjoutMessage">
       <div class="container" >
         <h1 class="margeHB">Rédiger votre message </h1>
@@ -28,7 +27,6 @@
 </template>
 
 <script>
-import ConnectedProfile from '@/components/ConnectedProfile.vue'
 import Header3 from '@/components/Header3.vue'
 import Footer from '@/components/Footer.vue'
 import axios from "axios";
@@ -42,7 +40,7 @@ export default {
     }  
   },
   components: {
-    Header3, Footer, ConnectedProfile
+    Header3, Footer 
   },
  /* props: {
       required: {type: String, value: "false"},

@@ -6,14 +6,13 @@
       <router-link id="btn" v-bind:to="'/DeleteUser'">Supprimer Profil  </router-link>
       <router-link id="btn" v-bind:to="'/DisplayUsers/'">Annuaire Utilisateurs  </router-link>
     </div>
-    <div><hr></div>
+    <div class="hr"><hr></div>
     <ConnectedProfile />
 
       <img alt="Vue logo" src="../assets/images/profil.jpg">  
     <div class="home">
       <img alt="Vue logo" src="../assets/images/icon-above-font2.png">  
     </div>
-    <p id="profil_connecté">Profil Connecté : {{user.nom}} {{user.prenom}}</p>
     <router-view/>
   <Footer />
 </template>
@@ -63,8 +62,8 @@ export default {
   flex-direction: row;
   justify-content: space-around;
 }
- hr {
-  height: 7px;
+ .hr {
+  height: 5px;
   background-color:  #F4511E;
   border: none;
 }

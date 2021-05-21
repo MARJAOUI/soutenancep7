@@ -35,7 +35,6 @@ module.exports = {
                     titre: titre,
                     contenu: contenu,
                     imageUrl:  req.file && `${req.protocol}://${req.get('host')}/${req.file?.filename}`,  //   req.file &&
-                    createdAt: createdAt,
                     UserId: userFound.id  // lien entre le user et le message créé
                 })
                 .then(function(newMessage) {
@@ -54,6 +53,49 @@ module.exports = {
             return res.status(500).json({'error': 'vérification user impossibe'});
             })
         },
+   /* createMessage: function (req, res, next) {
+        //  récupération autorisation
+        var headerAuth = req.headers ['authorization'];
+        var {userId} = auth.getUserId(headerAuth); ////    var userId = auth.getUserId();  
+        var {isAdmin} = auth.getUserId(headerAuth);   
+        //  paramètres
+        const message = [    
+        titre = req.body.titre,
+        contenu = req.body.contenu,
+        imageUrl = req.file && `${req.protocol}://${req.get('host')}`  
+        ]   
+        if (titre == null || contenu == null) {        //// || imageUrl == null
+            return res.status(400).json({'error': '  un parametre manquant'});
+        }
+        var userFound = models.User.findOne({
+            where: { id: userId }
+        })  
+        .then(function(userFound){
+            console.log(userFound);   
+            if (userFound) {         
+                const newMessage = models.Message.create( {
+                    titre: titre,
+                    contenu: contenu,
+                    imageUrl:  req.file && `${req.protocol}://${req.get('host')}/${req.file?.filename}`,  //   req.file &&
+                    createdAt: createdAt,
+                    UserId: userFound.id  // lien entre le user et le message créé
+                })
+                .then(function(newMessage) {
+                    if (newMessage) {
+                        return res.status(201).json(newMessage);
+                    }else {
+                        return res.status(500).json({'error': 'le message ne peut etre créé !'});
+                    }
+                })
+            }else {
+                return res.status(500).json({'error': 'user non trouvé'}); 
+            }
+        })
+        .catch(function(err) {
+            console.log(err);
+            return res.status(500).json({'error': 'vérification user impossibe'});
+            })
+        },*/
 /////////////////////////////////////////////////////////////
     listeMessages: function (req, res) {
         var fields = req.query.fields;  // selectionner les colonnes souhaitées

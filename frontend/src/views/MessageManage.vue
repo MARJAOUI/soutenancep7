@@ -5,7 +5,7 @@
       <router-link id="btn" v-bind:to="'/DisplayMessages'">Liste des Messages  </router-link>
       <router-link id="btn" v-bind:to="'/CreateMessage'">Créer un  Message  </router-link>
     </div>
-    <div><hr></div>
+    <div class="hr"><hr></div>
     <ConnectedProfile />
       <img alt="Vue logo" src="../assets/images/entreprise2.png">  
     <div class="home">
@@ -61,7 +61,7 @@ export default {
     flex-direction: row;
     justify-content: space-around;
 }
- hr {
+ .hr {
   height: 5px;
   background-color:  #F4511E;
   border: none;
