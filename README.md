@@ -12,7 +12,7 @@ Mise en place de la relation entre le message et le user qui l’a créé.
 •	Migrer les données vers la BD.
 •	Installation WAMP : plateforme de développement Web.
 •	PHPmyAdmin
-•	Une fichier export se trouve dans le répertoire dump du backend
+•	Un fichier export se trouve dans le répertoire dump du backend
 
 Serveur( Backend)
 
