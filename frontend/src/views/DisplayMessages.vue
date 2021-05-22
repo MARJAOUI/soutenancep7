@@ -187,4 +187,13 @@ span {
 #align_phot{
     background-color: cornflowerblue;
 }
+@media (max-width: 786px) {
+  .list_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    box-shadow: 5px 5px 8px #bb581e, -5px -5px 8px #bb581e;
+    border-radius: 3%;
+  }
+}
 </style>
