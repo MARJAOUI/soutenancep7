@@ -11,7 +11,6 @@
     <div class="home">
       <img alt="Vue logo" src="../assets/images/icon-above-font2.png">  
     </div>
-    <p id="profil_connecté">Profil Connecté : {{user.nom}} {{user.prenom}}</p>
     <router-view/>
   <Footer />
 </template>

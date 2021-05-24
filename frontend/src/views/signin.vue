@@ -64,10 +64,9 @@ export default {
 </script>
 
 <style>
-/*#container {
-    margin-top: 160px;
-    margin-bottom: 175px;
-}*/
+#container {
+   background-color: #ffd9d9;
+}
 .titre {
     color: #122442;
     font-size: 25px;

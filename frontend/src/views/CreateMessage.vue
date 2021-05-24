@@ -23,10 +23,12 @@
 
     <br />
     <br />
+    <ConnectedProfile />
   <Footer />
 </template>
 
 <script>
+import ConnectedProfile from '@/components/ConnectedProfile.vue'
 import Header3 from '@/components/Header3.vue'
 import Footer from '@/components/Footer.vue'
 import axios from "axios";
@@ -40,7 +42,7 @@ export default {
     }  
   },
   components: {
-    Header3, Footer 
+    Header3, Footer, ConnectedProfile
   },
   methods: {
     deletAttribute() 
