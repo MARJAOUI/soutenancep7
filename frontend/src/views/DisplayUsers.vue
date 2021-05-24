@@ -98,7 +98,7 @@ export default {
   border: none;
 }
 span {
-    color: red;
+  font-weight: bold;  
 }
 .texte {
     font-size: 15px;

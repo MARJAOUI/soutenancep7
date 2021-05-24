@@ -19,7 +19,6 @@ server.use((req, res, next) => {
     next();
 })
 // body-parser configuration
-server.use(bodyParser.urlencoded({ extended: true}));
 server.use(bodyParser.json());
 
 server.get ('/', function (req, res) {

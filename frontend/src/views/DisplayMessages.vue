@@ -124,9 +124,10 @@ export default {
     justify-content: space-around;
     box-shadow: 5px 5px 8px #bb581e, -5px -5px 8px #bb581e;
     border-radius: 3%;
+    background-color: cornflowerblue;
 }
 span {
-    color: red;
+    font-weight: bold;
 }
 .margeD {
     margin:  0px 15px 0 0px;
@@ -167,8 +168,10 @@ span {
   background-color:  #F4511E;
 }
 #message_image {
-    width: 100%;
-    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+   /* width: 100%;
+    height: 100%;*/
 }
 
 #align_message{
@@ -177,7 +180,7 @@ span {
     justify-content: space-around;
     width: 350px;
     height: 170px;
-    background-color: cornflowerblue;
+   /* background-color: cornflowerblue;*/
 }
 #hr {
   height: 15px;
@@ -194,6 +197,7 @@ span {
     justify-content: space-around;
     box-shadow: 5px 5px 8px #bb581e, -5px -5px 8px #bb581e;
     border-radius: 3%;
+    background-color: cornflowerblue;
   }
 }
 </style>

@@ -20,9 +20,9 @@ module.exports = {
        const prenom = req.body.prenom;
        const email = req.body.email;
        const password = req.body.password;
-       const isAdmin = req.body.isAdmin;
+       const isAdmin = false;
 
-       if (nom == null || prenom == null || email == null || password == null || isAdmin == null ) {
+       if (nom == null || prenom == null || email == null || password == null || isAdmin == null ) {  ///  
             return res.status(400).json({error: 'paramètre manquant'});
         }
         if (!EMAIL_REGEX.test(email)) {
@@ -123,11 +123,11 @@ module.exports = {
         const nom = req.body.nom;
         const prenom = req.body.prenom;
         const email = req.body.email;
-        const isAdmin = req.body.isAdmin;
         const password = req.body.password;
+        const isAdmin = req.body .isAdmin;
 
         models.User.findOne({
-            attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin'],  ////  , 'isAdmin'
+            attributes: ['id', 'nom', 'prenom', 'email', 'isAdmin' ],  //// 
             where: { id: userId}
         })
         .then(function(userFound) {
@@ -138,7 +138,7 @@ module.exports = {
                     prenom: prenom,
                     email: email,
                     password: bcryptedPassword,
-                    isAdmin: isAdmin,  
+                    isAdmin: false,  
                     })
                     .then(function(modifiedUser){
                         return res.status(200).json(({'message': 'Le profile a été modifié !'}))

@@ -1,11 +1,11 @@
 <template>
   <div class="home">
-    <div><hr></div>
+    <div class="hr"><hr></div>
     <div id="nav">
     <input  @click="inscription" id="btn"  type="submit"  value="Incsription " />
     <input  @click="identification" id="btn"  type="submit"  value="connection " />
     </div>
-    <div><hr></div>
+    <div class="hr"><hr></div>
     <img alt="Vue logo" src="../assets/images/entreprise2.png">  
   </div>
     <p class="bienvenue"> <span>GROUPOMANIA </span>vous souhaite la bienvenue sur son réseau social </p>
@@ -33,7 +33,7 @@ export default {
    }
 }
 </script>
-<style scoped>
+<style >
 .bienvenue {
   font-size: 30px;
   }
@@ -49,10 +49,11 @@ export default {
     flex-direction: row;
     justify-content: space-around;
   }
-  hr {
+  .hr {
   height: 5px;
   background-color:  #F4511E;
   border: none;
+  margin-top: 20px;
 }
 #btn {
   border: 0;
@@ -63,7 +64,6 @@ export default {
   text-align: center;
   border-radius: 10px;
   background-color:  #F4511E;
-
 }
 </style>
 

@@ -15,9 +15,9 @@
                 <input class="form_col_champ" name="contact_email"  placeholder="Format E-Mail" type="Email" v-model="user.email" >
                 <br /><br />
 
-                <label class="form_col_label" for="contact_isAdmin" >isAdmin </label>
+           <!-- <label class="form_col_label" for="contact_isAdmin" >isAdmin </label>
                 <input class="form_col_champ" name="contact_isAdmin"  placeholder="false or true" type="boolean" v-model="user.isAdmin" >
-                <br /><br />
+                <br /><br /> -->
 
                 <label class="form_col_label" for="pass" >Password </label>
                 <input class="form_col_champ" name="password" id="pass"   type="Password" placeholder= "+8car +1min +1maj +1num"  v-model="user.password" >
@@ -43,7 +43,7 @@ export default {
     },
     data() {
         return {
-            user : {nom: null , prenom: null, email: null, password: null, id: null, isAdmin: null},
+            user : {nom: null , prenom: null, email: null, password: null, id: null, isAdmin: null }, //  
         }
     },
     methods :{

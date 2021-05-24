@@ -64,14 +64,15 @@ export default {
 </script>
 
 <style>
-#container {
+/*#container {
     margin-top: 160px;
     margin-bottom: 175px;
-}
+}*/
 .titre {
     color: #122442;
     font-size: 25px;
     margin-bottom: 30px;
+    padding-top: 150px;
 }
 .form_col_label {
     display: inline-block;
