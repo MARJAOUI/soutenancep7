@@ -1,8 +1,9 @@
 <template>
     <div id="header">
-        <input  @click="accueil" id="bouton"  type="submit" class="btn_4" value="Deconnection " />
-        <img class="image_header"   src="../assets/images/icon-left-font2.png"  >
-        <input  @click="messages" id="bouton"  type="submit" class="btn_4" value="Liste messages " />
+         <input  @click="accueil" id="bouton"  type="submit" class="btn_4" value="Deconnection" />
+         <img class="image_header"   src="../assets/images/icon-left-font2.png"  >
+         <router-link id="bouton2" v-bind:to="lien">{{msg}}  </router-link>
+        <!--<input  @click="{lien}" id="bouton"  type="submit" class="btn_4"  />  h3 -->
     </div>
 </template>
 
@@ -12,9 +13,11 @@ export default {
         accueil () {
             this.$router.push({ path: "/" });
         },
-        messages () {
-            this.$router.push({ path: "/DisplayMessages" });
-        }
+        
+    },
+    props : {
+        lien:  String,
+        msg: String,
     }   
 }
 </script>
@@ -32,5 +35,12 @@ export default {
     color:  #F4511E;
     border: 0;
     text-decoration: bold;
+}
+#bouton2 {
+    background-color: #ffd9d9;
+    color:  #F4511E;
+    border: 0;
+    padding-top: 35px;
+    text-decoration: none;
 }
 </style>

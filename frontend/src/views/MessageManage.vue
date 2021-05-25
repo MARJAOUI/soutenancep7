@@ -1,5 +1,5 @@
 <template>
-  <Header2 />
+  <Header lien =/ProfileManage/ msg = "gestion des Profiles" />
     <p id="presentation" >Bonjour {{user.nom}} {{user.prenom}}</p>
     <h1> Gestion de vos messages </h1>
     <div id="nav" class="boutons">
@@ -17,7 +17,7 @@
 <script>
 import axios from 'axios';
 import Footer from  '@/components/Footer.vue';
-import Header2 from '@/components/Header2.vue';
+import Header from '@/components/Header.vue';
 export default {
   name: 'User',
   data () {
@@ -27,7 +27,7 @@ export default {
     }
   },
   components: { 
-    Header2, Footer
+    Header, Footer
   },
   mounted(){ 
     const config = {

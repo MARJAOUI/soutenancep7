@@ -1,5 +1,5 @@
 <template>
-<Header3 />
+<Header lien =/MessageManage/ msg = "Gestion des Messages" />
     <form class="flex flex-col" @submit.prevent="AjoutMessage">
       <div class="container" >
         <h1 class="margeHB">Rédiger votre message </h1>
@@ -29,7 +29,7 @@
 
 <script>
 import ConnectedProfile from '@/components/ConnectedProfile.vue'
-import Header3 from '@/components/Header3.vue'
+import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import axios from "axios";
 export default {
@@ -42,9 +42,12 @@ export default {
     }  
   },
   components: {
-    Header3, Footer, ConnectedProfile
+    Header, Footer, ConnectedProfile
   },
   methods: {
+    lien () {
+            this.$router.push({ path: "/MessageManage" });
+        },
     deletAttribute() 
     {
       var removeAttr = document.getElementById("disabledImage")

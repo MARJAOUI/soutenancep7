@@ -1,5 +1,5 @@
 <template>
-    <Header4 />
+    <Header lien = "" msg = ""/>
         <div id="container">
             <h1 class="titre is-size-1">Veuillez vous connecter SVP</h1>
             <div id="formulaire">
@@ -18,13 +18,13 @@
 </template> 
 
 <script>
-import Header4 from '@/components/Header4.vue';
+import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import axios from "axios";
 export default {
     name: "Signin",
     components: {
-        Header4, Footer
+        Header, Footer
     },
     data() {
         return {
@@ -35,6 +35,9 @@ export default {
         console.log(this.$route);
     },
     methods: {
+        lien () {
+            this.$router.push({ path: "/MessageManage" });
+        },
         connection () {
             const config = {
                     headers: {

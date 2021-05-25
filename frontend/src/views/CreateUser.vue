@@ -1,5 +1,5 @@
 <template>
-    <Header4 />
+    <Header lien = "" msg="" />
         <div class="container forms">
             <h1 >Valider votre inscription</h1>
             <div id="formulaire">
@@ -33,13 +33,13 @@
 </template>
 
 <script>
-import Header4 from '@/components/Header4.vue';
+import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import axios from "axios";
 export default {
     name: "Signup",
     components: {
-        Header4, Footer
+        Header, Footer
     },
     data() {
         return {

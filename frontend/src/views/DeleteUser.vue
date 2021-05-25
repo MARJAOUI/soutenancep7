@@ -1,5 +1,5 @@
 <template>
-  <Header2 />
+  <Header lien =/ProfileManage/ msg = "Gestion des Profiles" />
   <ConnectedProfile />
     <div id="nav" class="boutons">
       <input @click="suppression" id="supprimer user"  type="submit" class="btn"   value="Veuiller confirmer la suppression du User" />  
@@ -12,7 +12,7 @@
 </template>
 <script>
 import ConnectedProfile from '@/components/ConnectedProfile.vue'
-import Header2 from '@/components/Header2.vue';
+import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
 export default {
@@ -23,7 +23,7 @@ export default {
     }
   },
   components: { 
-    Header2, Footer, ConnectedProfile
+    Header, Footer, ConnectedProfile
   },
   mounted(userId){  
     const config = {
@@ -36,6 +36,9 @@ export default {
       });   
   },
   methods :{
+    lien () {
+            this.$router.push({ path: "/ProfileManage" });
+        },
     suppression () {
       const config = {
         headers: { Authorization: "Bearer " + localStorage.token } 

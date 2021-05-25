@@ -1,5 +1,5 @@
 <template>
-    <Header2 />
+    <Header lien =/ProfileManage/ msg = "gestion des Profiles" />
     <ConnectedProfile />
         <div id="container ">
             <h1 class="titre is-size-1">Modifier et Valider </h1>
@@ -30,13 +30,13 @@
 
 <script>
 import ConnectedProfile from '@/components/ConnectedProfile.vue'
-import Header2 from '@/components/Header2.vue';
+import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import axios from "axios";
 export default {
     name: "ModifyUser",
     components: {
-        Header2, Footer, ConnectedProfile  
+        Header, Footer, ConnectedProfile  
     },
     data() {
         return {
@@ -54,6 +54,9 @@ export default {
         });   
     },
     methods :{
+        lien () {
+            this.$router.push({ path: "/MessageManage" });
+        },
         modification () {
             const config = {
                     headers: { Authorization: "Bearer " + localStorage.token } 

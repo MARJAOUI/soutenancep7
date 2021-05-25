@@ -1,5 +1,5 @@
 <template>
-    <Header3 />
+    <Header lien =/MessageManage/ msg = "Gestion des Messages" />
         <div id="container">
         <ConnectedProfile />    
             <p id="message_accueil"> Messages à consulter ! </p>
@@ -30,14 +30,14 @@
 </template>
 <script>
 import moment from 'moment';
-import Header3 from '@/components/Header3.vue'
+import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import ConnectedProfile from '@/components/ConnectedProfile.vue'
 import axios from 'axios';
 export default {
     name: 'DisplayMessages',
     components: {
-      Header3, Footer, ConnectedProfile
+      Header, Footer, ConnectedProfile
     },
     data() { 
         return { 
@@ -61,6 +61,9 @@ export default {
             });
     },
     methods: {
+        lien () {
+            this.$router.push({ path: "/MessageManage" });
+        },
         detailMessage(){
             const config = {
                 headers: { Authorization: "Bearer " + localStorage.token } 

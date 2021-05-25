@@ -1,5 +1,5 @@
 <template>
-    <Header2 />
+    <Header lien =/ProfileManage/ msg = "gestion des Profiles" />
     
         <div id="container">
             <ConnectedProfile />
@@ -26,14 +26,14 @@
 </template>
 <script>
 import ConnectedProfile from '@/components/ConnectedProfile.vue';
-import Header2 from '@/components/Header2.vue';
+import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import axios from 'axios';
 import moment from 'moment';
 export default {
     name: 'DisplayMessages',
     components: {
-      Header2, Footer, ConnectedProfile
+      Header, Footer, ConnectedProfile
     },
     data() { 
         return { 
